@@ -25,7 +25,13 @@ html{scroll-behavior:smooth;}
 body{
   background:var(--black);color:var(--text);
   font-family:'Inter',sans-serif;font-size:15px;line-height:1.5;
-  overflow-x:hidden;min-height:100vh;
+  overflow:hidden;
+  height:100dvh;
+  display:flex;flex-direction:column;
+}
+#appShell{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
   padding-bottom:calc(var(--nav-h) + var(--safe-bot));
 }
 a{color:inherit;text-decoration:none;}
@@ -44,6 +50,7 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   position:sticky;top:0;z-index:100;
   border-bottom:1px solid var(--border);
+  flex-shrink:0;
 }
 .app-header-top{display:flex;align-items:center;justify-content:space-between;}
 .app-header-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;}
@@ -62,7 +69,7 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
 
 /* ── BOTTOM NAVIGATION ── */
 #bottomNav{
-  position:fixed;bottom:0;left:0;right:0;z-index:300;
+  position:relative;z-index:300;flex-shrink:0;
   background:rgba(6,6,6,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-top:1px solid var(--border2);
   padding:8px 4px calc(8px + var(--safe-bot));
@@ -621,6 +628,9 @@ footer{
   </div>
 </nav>
 
+<!-- APP SHELL WRAPPER -->
+<div id="appShell">
+
 <!-- STICKY APP HEADER -->
 <div class="status-bar-pad"></div>
 <header class="app-header">
@@ -632,55 +642,6 @@ footer{
     </div>
   </div>
 </header>
-
-<!-- BOTTOM NAVIGATION -->
-<nav id="bottomNav">
-  <div class="bn-scroll">
-    <button class="ntab active" data-view="home">
-      <span class="ntab-icon">⌂</span>
-      <span class="ntab-label">Home</span>
-    </button>
-    <button class="ntab" data-view="mon">
-      <span class="ntab-icon">M</span>
-      <span class="ntab-label">Mon</span>
-      <span class="day-dot" id="dot-mon"></span>
-    </button>
-    <button class="ntab" data-view="tue">
-      <span class="ntab-icon">T</span>
-      <span class="ntab-label">Tue</span>
-      <span class="day-dot" id="dot-tue"></span>
-    </button>
-    <button class="ntab" data-view="wed">
-      <span class="ntab-icon">W</span>
-      <span class="ntab-label">Wed</span>
-      <span class="day-dot" id="dot-wed"></span>
-    </button>
-    <button class="ntab" data-view="thu">
-      <span class="ntab-icon">T</span>
-      <span class="ntab-label">Thu</span>
-      <span class="day-dot" id="dot-thu"></span>
-    </button>
-    <button class="ntab" data-view="fri">
-      <span class="ntab-icon">F</span>
-      <span class="ntab-label">Fri</span>
-      <span class="day-dot" id="dot-fri"></span>
-    </button>
-    <button class="ntab" data-view="sat">
-      <span class="ntab-icon">S</span>
-      <span class="ntab-label">Sat</span>
-      <span class="day-dot" id="dot-sat"></span>
-    </button>
-    <button class="ntab" data-view="sun">
-      <span class="ntab-icon">S</span>
-      <span class="ntab-label">Sun</span>
-      <span class="day-dot" id="dot-sun"></span>
-    </button>
-    <button class="ntab" data-view="stats">
-      <span class="ntab-icon">◈</span>
-      <span class="ntab-label">Stats</span>
-    </button>
-  </div>
-</nav>
 
 <!-- HOME VIEW -->
 <div id="view-home" class="view active">
@@ -821,6 +782,57 @@ footer{
   <div class="ft-main">230 → 165</div>
   <div class="ft">Complete Transformation Blueprint</div>
 </footer>
+
+</div><!-- end #appShell -->
+
+<!-- BOTTOM NAVIGATION -->
+<nav id="bottomNav">
+  <div class="bn-scroll">
+    <button class="ntab active" data-view="home">
+      <span class="ntab-icon">⌂</span>
+      <span class="ntab-label">Home</span>
+    </button>
+    <button class="ntab" data-view="mon">
+      <span class="ntab-icon">M</span>
+      <span class="ntab-label">Mon</span>
+      <span class="day-dot" id="dot-mon"></span>
+    </button>
+    <button class="ntab" data-view="tue">
+      <span class="ntab-icon">T</span>
+      <span class="ntab-label">Tue</span>
+      <span class="day-dot" id="dot-tue"></span>
+    </button>
+    <button class="ntab" data-view="wed">
+      <span class="ntab-icon">W</span>
+      <span class="ntab-label">Wed</span>
+      <span class="day-dot" id="dot-wed"></span>
+    </button>
+    <button class="ntab" data-view="thu">
+      <span class="ntab-icon">T</span>
+      <span class="ntab-label">Thu</span>
+      <span class="day-dot" id="dot-thu"></span>
+    </button>
+    <button class="ntab" data-view="fri">
+      <span class="ntab-icon">F</span>
+      <span class="ntab-label">Fri</span>
+      <span class="day-dot" id="dot-fri"></span>
+    </button>
+    <button class="ntab" data-view="sat">
+      <span class="ntab-icon">S</span>
+      <span class="ntab-label">Sat</span>
+      <span class="day-dot" id="dot-sat"></span>
+    </button>
+    <button class="ntab" data-view="sun">
+      <span class="ntab-icon">S</span>
+      <span class="ntab-label">Sun</span>
+      <span class="day-dot" id="dot-sun"></span>
+    </button>
+    <button class="ntab" data-view="stats">
+      <span class="ntab-icon">◈</span>
+      <span class="ntab-label">Stats</span>
+    </button>
+  </div>
+</nav>
 
 <!-- ══ REST TIMER MODAL ══ -->
 <div class="overlay" id="restOverlay">
@@ -1366,7 +1378,8 @@ function switchView(viewId, fromBtn) {
   document.getElementById('view-' + viewId).classList.add('active');
   // Activate all tabs (top hidden + bottom visible) matching this view
   document.querySelectorAll(`.ntab[data-view="${viewId}"]`).forEach(t => t.classList.add('active'));
-  window.scrollTo({top:0, behavior:'smooth'});
+  const shell = document.getElementById('appShell');
+  if (shell) shell.scrollTo({top:0, behavior:'smooth'});
   if (viewId !== 'home' && viewId !== 'stats') updateDayProgress(viewId);
 }
 
