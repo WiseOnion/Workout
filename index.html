@@ -25,13 +25,7 @@ html{scroll-behavior:smooth;}
 body{
   background:var(--black);color:var(--text);
   font-family:'Inter',sans-serif;font-size:15px;line-height:1.5;
-  overflow:hidden;
-  height:100dvh;
-  display:flex;flex-direction:column;
-}
-#appShell{
-  flex:1;overflow-y:auto;overflow-x:hidden;
-  -webkit-overflow-scrolling:touch;
+  overflow-x:hidden;min-height:100vh;
   padding-bottom:calc(var(--nav-h) + var(--safe-bot));
 }
 a{color:inherit;text-decoration:none;}
@@ -50,7 +44,6 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   position:sticky;top:0;z-index:100;
   border-bottom:1px solid var(--border);
-  flex-shrink:0;
 }
 .app-header-top{display:flex;align-items:center;justify-content:space-between;}
 .app-header-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;}
@@ -69,7 +62,7 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
 
 /* ── BOTTOM NAVIGATION ── */
 #bottomNav{
-  position:relative;z-index:300;flex-shrink:0;
+  position:fixed;bottom:0;left:0;right:0;z-index:300;
   background:rgba(6,6,6,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
   border-top:1px solid var(--border2);
   padding:8px 4px calc(8px + var(--safe-bot));
@@ -301,9 +294,7 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
 .ex-card{
   background:var(--card);border-radius:var(--r);
   border:1px solid var(--border2);margin-bottom:8px;overflow:hidden;
-  cursor:pointer;active:opacity:.85;
 }
-.ex-card:active{opacity:.85;}
 .ex-card.completed .ex-name{text-decoration:line-through;opacity:.45;}
 .ex-card.completed{opacity:.6;}
 
@@ -630,9 +621,6 @@ footer{
   </div>
 </nav>
 
-<!-- APP SHELL WRAPPER -->
-<div id="appShell">
-
 <!-- STICKY APP HEADER -->
 <div class="status-bar-pad"></div>
 <header class="app-header">
@@ -644,6 +632,55 @@ footer{
     </div>
   </div>
 </header>
+
+<!-- BOTTOM NAVIGATION -->
+<nav id="bottomNav">
+  <div class="bn-scroll">
+    <button class="ntab active" data-view="home">
+      <span class="ntab-icon">⌂</span>
+      <span class="ntab-label">Home</span>
+    </button>
+    <button class="ntab" data-view="mon">
+      <span class="ntab-icon">M</span>
+      <span class="ntab-label">Mon</span>
+      <span class="day-dot" id="dot-mon"></span>
+    </button>
+    <button class="ntab" data-view="tue">
+      <span class="ntab-icon">T</span>
+      <span class="ntab-label">Tue</span>
+      <span class="day-dot" id="dot-tue"></span>
+    </button>
+    <button class="ntab" data-view="wed">
+      <span class="ntab-icon">W</span>
+      <span class="ntab-label">Wed</span>
+      <span class="day-dot" id="dot-wed"></span>
+    </button>
+    <button class="ntab" data-view="thu">
+      <span class="ntab-icon">T</span>
+      <span class="ntab-label">Thu</span>
+      <span class="day-dot" id="dot-thu"></span>
+    </button>
+    <button class="ntab" data-view="fri">
+      <span class="ntab-icon">F</span>
+      <span class="ntab-label">Fri</span>
+      <span class="day-dot" id="dot-fri"></span>
+    </button>
+    <button class="ntab" data-view="sat">
+      <span class="ntab-icon">S</span>
+      <span class="ntab-label">Sat</span>
+      <span class="day-dot" id="dot-sat"></span>
+    </button>
+    <button class="ntab" data-view="sun">
+      <span class="ntab-icon">S</span>
+      <span class="ntab-label">Sun</span>
+      <span class="day-dot" id="dot-sun"></span>
+    </button>
+    <button class="ntab" data-view="stats">
+      <span class="ntab-icon">◈</span>
+      <span class="ntab-label">Stats</span>
+    </button>
+  </div>
+</nav>
 
 <!-- HOME VIEW -->
 <div id="view-home" class="view active">
@@ -785,57 +822,6 @@ footer{
   <div class="ft">Complete Transformation Blueprint</div>
 </footer>
 
-</div><!-- end #appShell -->
-
-<!-- BOTTOM NAVIGATION -->
-<nav id="bottomNav">
-  <div class="bn-scroll">
-    <button class="ntab active" data-view="home">
-      <span class="ntab-icon">⌂</span>
-      <span class="ntab-label">Home</span>
-    </button>
-    <button class="ntab" data-view="mon">
-      <span class="ntab-icon">M</span>
-      <span class="ntab-label">Mon</span>
-      <span class="day-dot" id="dot-mon"></span>
-    </button>
-    <button class="ntab" data-view="tue">
-      <span class="ntab-icon">T</span>
-      <span class="ntab-label">Tue</span>
-      <span class="day-dot" id="dot-tue"></span>
-    </button>
-    <button class="ntab" data-view="wed">
-      <span class="ntab-icon">W</span>
-      <span class="ntab-label">Wed</span>
-      <span class="day-dot" id="dot-wed"></span>
-    </button>
-    <button class="ntab" data-view="thu">
-      <span class="ntab-icon">T</span>
-      <span class="ntab-label">Thu</span>
-      <span class="day-dot" id="dot-thu"></span>
-    </button>
-    <button class="ntab" data-view="fri">
-      <span class="ntab-icon">F</span>
-      <span class="ntab-label">Fri</span>
-      <span class="day-dot" id="dot-fri"></span>
-    </button>
-    <button class="ntab" data-view="sat">
-      <span class="ntab-icon">S</span>
-      <span class="ntab-label">Sat</span>
-      <span class="day-dot" id="dot-sat"></span>
-    </button>
-    <button class="ntab" data-view="sun">
-      <span class="ntab-icon">S</span>
-      <span class="ntab-label">Sun</span>
-      <span class="day-dot" id="dot-sun"></span>
-    </button>
-    <button class="ntab" data-view="stats">
-      <span class="ntab-icon">◈</span>
-      <span class="ntab-label">Stats</span>
-    </button>
-  </div>
-</nav>
-
 <!-- ══ REST TIMER MODAL ══ -->
 <div class="overlay" id="restOverlay">
   <div class="modal">
@@ -927,50 +913,27 @@ footer{
   </div>
 </div>
 
-<!-- ══ EXERCISE DETAIL MODAL ══ -->
+<!-- ══ VIDEO MODAL ══ -->
 <div class="overlay" id="videoModal" onclick="videoOverlayClick(event)">
-  <div class="modal" id="exDetailModal" style="text-align:left;padding:8px 0 calc(24px + var(--safe-bot));">
-    <button class="modal-close" onclick="closeVideo()" style="position:absolute;top:16px;right:16px;">✕</button>
-
-    <!-- Exercise name + note -->
-    <div style="padding:0 20px 16px;">
-      <div class="modal-tag" id="exd-tag">EXERCISE</div>
-      <div style="font-family:'DM Mono',monospace;font-size:26px;font-weight:800;color:var(--white);line-height:1.1;margin-bottom:8px;" id="exd-name">—</div>
-      <div style="font-size:14px;color:var(--muted);font-style:italic;line-height:1.6;" id="exd-note"></div>
-      <!-- Tags row -->
-      <div class="ex-tags" id="exd-tags" style="margin-top:12px;"></div>
-    </div>
-
-    <!-- Video thumbnail -->
-    <div style="padding:0 20px 16px;">
-      <div class="vm-frame" id="exd-frame-wrap">
-        <div id="vmThumbWrap" style="position:absolute;inset:0;cursor:pointer;" onclick="vmLoadIframe()">
-          <img id="vmThumb" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
-          <div id="vmPlayBtn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-            <div style="width:60px;height:60px;background:rgba(255,77,28,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.5);">
-              <div style="width:0;height:0;border-style:solid;border-width:10px 0 10px 18px;border-color:transparent transparent transparent #fff;margin-left:4px;"></div>
-            </div>
+  <div class="modal" style="padding:20px 16px calc(20px + var(--safe-bot));">
+    <button class="modal-close" onclick="closeVideo()">✕</button>
+    <div class="vm-label" id="vmLabel">—</div>
+    <!-- Thumbnail click-to-play (no iframe until tapped — faster on mobile) -->
+    <div class="vm-frame">
+      <div id="vmThumbWrap" style="position:absolute;inset:0;cursor:pointer;" onclick="vmLoadIframe()">
+        <img id="vmThumb" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <div id="vmPlayBtn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <div style="width:64px;height:64px;background:rgba(255,77,28,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.5);">
+            <div style="width:0;height:0;border-style:solid;border-width:12px 0 12px 22px;border-color:transparent transparent transparent #fff;margin-left:5px;"></div>
           </div>
         </div>
-        <iframe id="vmFrame" src="" allowfullscreen allow="autoplay; encrypted-media" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
       </div>
-      <div style="display:flex;gap:8px;margin-top:10px;">
-        <a id="vmYT" href="#" target="_blank" style="flex:1;"><button class="vm-link" style="width:100%;">▶ Open in YouTube</button></a>
-        <a id="vmSearch" href="#" target="_blank" style="flex:1;"><button class="vm-link" style="width:100%;">Search More</button></a>
-      </div>
+      <iframe id="vmFrame" src="" allowfullscreen allow="autoplay; encrypted-media" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
     </div>
-
-    <!-- Coach tip — big description -->
-    <div style="padding:0 20px 16px;" id="exd-tip-wrap">
-      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Coach Tip</div>
-      <div style="font-size:15px;color:var(--text);line-height:1.8;background:rgba(200,241,53,.04);border-left:3px solid rgba(200,241,53,.4);padding:14px 16px;border-radius:0 10px 10px 0;" id="exd-tip"></div>
+    <div class="vm-links">
+      <a id="vmYT" href="#" target="_blank"><button class="vm-link">▶ Open in YouTube</button></a>
+      <a id="vmSearch" href="#" target="_blank"><button class="vm-link">Search More</button></a>
     </div>
-
-    <!-- Timer buttons -->
-    <div style="padding:0 20px;" id="exd-timers"></div>
-
-    <!-- Hidden label for JS compat -->
-    <div id="vmLabel" style="display:none;">—</div>
   </div>
 </div>
 
@@ -1278,29 +1241,30 @@ function buildExCard(ex, dayId) {
   if (hasSets) {
     bubblesHtml = `<div class="set-bubbles-row" id="bubbles-${ex.id}">`;
     for (let i = 1; i <= ex.sets; i++) {
-      bubblesHtml += `<div class="set-bubble${ex.isHold?' hold-bubble':''}" id="bubble-${ex.id}-${i}" onclick="event.stopPropagation();markSet('${ex.id}',${i},${ex.rest||0},'${(ex.name).replace(/'/g,"\\'")}',${ex.isHold?'true':'false'})" title="Set ${i}">${i}</div>`;
+      bubblesHtml += `<div class="set-bubble${ex.isHold?' hold-bubble':''}" id="bubble-${ex.id}-${i}" onclick="markSet('${ex.id}',${i},${ex.rest||0},'${(ex.name).replace(/'/g,"\\'")}',${ex.isHold?'true':'false'})" title="Set ${i}">${i}</div>`;
     }
-    bubblesHtml += `<div class="weight-chip"><div class="weight-val" id="wv-${ex.id}" onclick="event.stopPropagation();openWeightModal('${ex.id}','${(ex.name).replace(/'/g,"\\'")}')">+ Weight</div><span class="pr-badge" id="pr-${ex.id}">PR!</span></div>`;
+    // Weight chip
+    bubblesHtml += `<div class="weight-chip"><div class="weight-val" id="wv-${ex.id}" onclick="openWeightModal('${ex.id}','${(ex.name).replace(/'/g,"\\'")}')">+ Weight</div><span class="pr-badge" id="pr-${ex.id}">PR!</span></div>`;
     bubblesHtml += `</div>`;
   }
 
-  // Timer buttons (small, kept on card)
-  let timerHtml = '';
-  if (ex.rest) timerHtml += `<button class="ex-btn tmr" onclick="event.stopPropagation();openRest(${ex.rest},'${(ex.name).replace(/'/g,"\\'")}')">⏱ ${ex.rest}s rest</button>`;
-  if (ex.isHold && ex.holdSecs) timerHtml += `<button class="ex-btn hld" onclick="event.stopPropagation();openHold(${ex.holdSecs},'${(ex.name).replace(/'/g,"\\'")}')">⏱ Hold ${ex.holdSecs}s</button>`;
+  // Actions
+  let actHtml = '';
+  if (ex.video) actHtml += `<button class="ex-btn vid" onclick="openVideo('${ex.video}','${(ex.name).replace(/'/g,"\\'")}')">▶ Video</button>`;
+  if (ex.rest) actHtml += `<button class="ex-btn tmr" onclick="openRest(${ex.rest},'${(ex.name).replace(/'/g,"\\'")}')">⏱ ${ex.rest}s</button>`;
+  if (ex.isHold && ex.holdSecs) actHtml += `<button class="ex-btn hld" onclick="openHold(${ex.holdSecs},'${(ex.name).replace(/'/g,"\\'")}')">⏱ Hold</button>`;
 
-  const safeName = (ex.name).replace(/'/g,"\\'");
-
-  return `<div class="ex-card" id="ec-${ex.id}" onclick="openExDetail('${ex.id}')">
+  return `<div class="ex-card" id="ec-${ex.id}">
   <div class="ex-inner">
-    <div class="ex-check-col"><input type="checkbox" class="ex-checkbox" id="cb-${ex.id}" data-day="${dayId}" onclick="event.stopPropagation()" onchange="checkboxChanged('${ex.id}','${dayId}')"></div>
+    <div class="ex-check-col"><input type="checkbox" class="ex-checkbox" id="cb-${ex.id}" data-day="${dayId}" onchange="checkboxChanged('${ex.id}','${dayId}')"></div>
     <div class="ex-main">
       <div class="ex-name">${ex.name}</div>
       ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
       <div class="ex-tags">${tagsHtml}</div>
       ${bubblesHtml}
+      ${ex.tip ? `<button class="coach-tip-toggle" onclick="toggleTip('${ex.id}')">▸ Coach Tip</button><div class="coach-tip-body" id="tip-${ex.id}">${ex.tip}</div>` : ''}
     </div>
-    ${timerHtml ? `<div class="ex-actions">${timerHtml}</div>` : ''}
+    ${actHtml ? `<div class="ex-actions">${actHtml}</div>` : ''}
   </div>
 </div>`;
 }
@@ -1402,8 +1366,7 @@ function switchView(viewId, fromBtn) {
   document.getElementById('view-' + viewId).classList.add('active');
   // Activate all tabs (top hidden + bottom visible) matching this view
   document.querySelectorAll(`.ntab[data-view="${viewId}"]`).forEach(t => t.classList.add('active'));
-  const shell = document.getElementById('appShell');
-  if (shell) shell.scrollTo({top:0, behavior:'smooth'});
+  window.scrollTo({top:0, behavior:'smooth'});
   if (viewId !== 'home' && viewId !== 'stats') updateDayProgress(viewId);
 }
 
@@ -1930,42 +1893,6 @@ const VIDEO_MAP = {
   'stair climber':'Zn1O9LcKW9E',
 }
 
-function openExDetail(exId) {
-  const ex = findExercise(exId);
-  if (!ex) return;
-
-  // Name + note
-  document.getElementById('exd-name').textContent = ex.name;
-  document.getElementById('exd-note').textContent = ex.note || '';
-  document.getElementById('exd-note').style.display = ex.note ? 'block' : 'none';
-
-  // Tags
-  let tagsHtml = '';
-  if (ex.sets > 0) tagsHtml += `<span class="ex-tag t-sets">${ex.sets} Sets</span>`;
-  if (ex.reps && !ex.isHold) tagsHtml += `<span class="ex-tag t-reps">${ex.reps} Reps</span>`;
-  if (ex.isHold && ex.holdSecs) tagsHtml += `<span class="ex-tag t-hold">${ex.holdSecs}s Hold</span>`;
-  if (ex.rest) tagsHtml += `<span class="ex-tag t-rest">Rest ${ex.rest}s</span>`;
-  document.getElementById('exd-tags').innerHTML = tagsHtml;
-
-  // Coach tip
-  const tipWrap = document.getElementById('exd-tip-wrap');
-  if (ex.tip) {
-    document.getElementById('exd-tip').textContent = ex.tip;
-    tipWrap.style.display = 'block';
-  } else {
-    tipWrap.style.display = 'none';
-  }
-
-  // Timer buttons
-  let timersHtml = '';
-  if (ex.rest) timersHtml += `<button class="mc-btn" style="margin-bottom:8px;width:100%;" onclick="closeVideo();openRest(${ex.rest},'${ex.name.replace(/'/g,"\\'")}')">⏱ Start ${ex.rest}s Rest Timer</button>`;
-  if (ex.isHold && ex.holdSecs) timersHtml += `<button class="mc-btn hold-primary" style="margin-bottom:8px;width:100%;" onclick="closeVideo();openHold(${ex.holdSecs},'${ex.name.replace(/'/g,"\\'")}')">⏱ Start ${ex.holdSecs}s Hold Timer</button>`;
-  document.getElementById('exd-timers').innerHTML = timersHtml;
-
-  // Video
-  openVideo(ex.video || '', ex.name);
-}
-
 function openVideo(query, name) {
   document.getElementById('vmLabel').textContent = name;
   const q = (name + ' ' + query).toLowerCase();
@@ -1973,9 +1900,10 @@ function openVideo(query, name) {
   for (const [k, v] of Object.entries(VIDEO_MAP)) {
     if (q.includes(k)) { videoId = v; break; }
   }
-  const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query || name);
+  const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
   document.getElementById('vmSearch').href = searchUrl;
 
+  // Reset to thumbnail state (don't load iframe until user taps play)
   const frame = document.getElementById('vmFrame');
   const thumb = document.getElementById('vmThumb');
   const thumbWrap = document.getElementById('vmThumbWrap');
@@ -1985,6 +1913,7 @@ function openVideo(query, name) {
   thumbWrap.style.display = 'block';
 
   if (videoId) {
+    // Use hqdefault — higher res than mqdefault, works for all videos
     thumb.src = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
     thumb.style.display = 'block';
     playBtn.style.display = 'flex';
@@ -1992,6 +1921,7 @@ function openVideo(query, name) {
     document.getElementById('vmYT').href = 'https://www.youtube.com/watch?v=' + videoId;
     document.getElementById('vmYT').querySelector('button').textContent = '▶ Open in YouTube';
   } else {
+    // No match — show search prompt instead of broken thumbnail
     thumb.src = '';
     thumb.style.display = 'none';
     playBtn.style.display = 'none';
