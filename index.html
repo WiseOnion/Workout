@@ -68,18 +68,23 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
   padding:8px 4px calc(8px + var(--safe-bot));
   display:flex;align-items:flex-start;
   height:calc(var(--nav-h) + var(--safe-bot));
+  overflow:hidden;
+  touch-action:none;
 }
 .bn-scroll{
-  display:flex;overflow-x:auto;scrollbar-width:none;flex:1;
+  display:flex;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex:1;
   -webkit-overflow-scrolling:touch;gap:0;
+  touch-action:pan-x;
 }
 .bn-scroll::-webkit-scrollbar{display:none;}
 .ntab{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;min-width:52px;padding:0 8px;cursor:pointer;
+  gap:3px;min-width:60px;padding:0 10px;cursor:pointer;
   border:none;background:none;flex-shrink:0;
   min-height:48px;position:relative;
+  border-radius:12px;transition:background .2s;
 }
+.ntab:active{background:rgba(200,241,53,.07);}
 .ntab-icon{
   font-family:'DM Mono',monospace;font-size:14px;font-weight:700;
   line-height:1;color:var(--muted);transition:transform .2s,color .2s;
@@ -100,8 +105,8 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
 .ntab .day-dot.show{display:block;}
 /* active indicator pill */
 .ntab.active::after{
-  content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
-  width:20px;height:3px;background:var(--accent);border-radius:2px;
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:24px;height:2px;background:var(--accent);border-radius:0 0 2px 2px;
 }
 
 /* ── VIEWS ── */
