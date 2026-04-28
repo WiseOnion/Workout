@@ -326,6 +326,7 @@ input,button{font-family:inherit;-webkit-appearance:none;border-radius:0;}
 }
 .ex-main{grid-row:1;grid-column:2;padding:14px 14px 10px;}
 .ex-name{font-size:15px;font-weight:600;color:var(--white);margin-bottom:2px;line-height:1.3;}
+.ex-card:active{opacity:.8;}
 .ex-note{font-size:12px;color:var(--muted);font-style:italic;margin-top:4px;line-height:1.5;}
 .ex-tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;align-items:center;}
 .ex-tag{
@@ -579,18 +580,23 @@ canvas.pchart{width:100%;height:100%;}
 .wim-input:focus{border-color:var(--accent3);}
 .wim-unit{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:20px;}
 
-/* Video modal */
-#videoModal .modal{max-height:96vh;padding:8px 16px calc(20px + var(--safe-bot));}
-.vm-label{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;}
+/* Exercise detail sheet */
+#exDetailModal .modal{text-align:left;max-height:96vh;padding:8px 20px calc(28px + var(--safe-bot));}
+.exd-name{font-family:'DM Mono',monospace;font-size:24px;font-weight:700;color:var(--white);line-height:1.2;margin-bottom:6px;}
+.exd-note{font-size:13px;color:var(--muted);font-style:italic;line-height:1.5;}
 .vm-frame{position:relative;padding-bottom:56.25%;background:#000;border-radius:var(--r-sm);overflow:hidden;}
 .vm-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-.vm-links{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.exd-no-video{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;padding:22px 0;background:var(--card);border-radius:var(--r-sm);border:1px solid var(--border);}
+.vm-links{display:flex;gap:8px;margin-top:10px;margin-bottom:18px;flex-wrap:wrap;}
 .vm-link{
   font-family:'DM Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
   padding:12px 14px;background:var(--dark);border:1px solid var(--border2);
   color:var(--text);cursor:pointer;min-height:48px;border-radius:var(--r-sm);
   flex:1;
 }
+.exd-tip-block{background:rgba(200,241,53,.05);border:1px solid rgba(200,241,53,.18);border-radius:var(--r-sm);padding:16px;margin-bottom:6px;}
+.exd-tip-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+.exd-tip-text{font-size:13px;color:var(--text);line-height:1.8;}
 
 /* Session complete */
 .done-emoji{font-size:56px;margin-bottom:10px;display:block;}
@@ -921,26 +927,46 @@ footer{
   </div>
 </div>
 
-<!-- ══ VIDEO MODAL ══ -->
-<div class="overlay" id="videoModal" onclick="videoOverlayClick(event)">
-  <div class="modal" style="padding:20px 16px calc(20px + var(--safe-bot));">
-    <button class="modal-close" onclick="closeVideo()">✕</button>
-    <div class="vm-label" id="vmLabel">—</div>
-    <!-- Thumbnail click-to-play (no iframe until tapped — faster on mobile) -->
-    <div class="vm-frame">
-      <div id="vmThumbWrap" style="position:absolute;inset:0;cursor:pointer;" onclick="vmLoadIframe()">
-        <img id="vmThumb" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
-        <div id="vmPlayBtn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+<!-- ══ EXERCISE DETAIL SHEET ══ -->
+<div class="overlay" id="exDetailModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('exDetailModal')">✕</button>
+
+    <div class="exd-name" id="exdName">—</div>
+    <div class="exd-note" id="exdNote" style="display:none;"></div>
+
+    <div class="ex-tags" id="exdTags" style="margin:14px 0 18px;justify-content:flex-start;"></div>
+
+    <!-- Video thumbnail / player -->
+    <div class="vm-frame" id="exdVideoWrap" style="margin-bottom:10px;">
+      <div id="exdThumbWrap" style="position:absolute;inset:0;cursor:pointer;" onclick="exdLoadIframe()">
+        <img id="exdThumb" src="" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <div id="exdPlayBtn" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
           <div style="width:64px;height:64px;background:rgba(255,77,28,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.5);">
             <div style="width:0;height:0;border-style:solid;border-width:12px 0 12px 22px;border-color:transparent transparent transparent #fff;margin-left:5px;"></div>
           </div>
         </div>
       </div>
-      <iframe id="vmFrame" src="" allowfullscreen allow="autoplay; encrypted-media" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
+      <iframe id="exdFrame" src="" allowfullscreen allow="autoplay; encrypted-media" style="display:none;position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>
     </div>
+    <div class="exd-no-video" id="exdNoVideo" style="display:none;margin-bottom:10px;">No tutorial matched — search below</div>
+
+    <!-- YouTube + Search -->
     <div class="vm-links">
-      <a id="vmYT" href="#" target="_blank"><button class="vm-link">▶ Open in YouTube</button></a>
-      <a id="vmSearch" href="#" target="_blank"><button class="vm-link">Search More</button></a>
+      <a id="exdYT" href="#" target="_blank"><button class="vm-link">▶ YouTube</button></a>
+      <a id="exdSearch" href="#" target="_blank"><button class="vm-link">🔍 Search More</button></a>
+    </div>
+
+    <!-- Coach tip -->
+    <div class="exd-tip-block" id="exdTipBlock" style="display:none;">
+      <div class="exd-tip-label">Coach Tip</div>
+      <div class="exd-tip-text" id="exdTipText"></div>
+    </div>
+
+    <!-- Rest / Hold timers -->
+    <div class="modal-ctrls" id="exdTimerRow" style="display:none;margin-top:16px;">
+      <button class="mc-btn primary" id="exdRestBtn" style="display:none;">⏱ Rest Timer</button>
+      <button class="mc-btn hold-primary" id="exdHoldBtn" style="display:none;">⏱ Hold Timer</button>
     </div>
   </div>
 </div>
@@ -1249,34 +1275,31 @@ function buildExCard(ex, dayId) {
   if (hasSets) {
     bubblesHtml = `<div class="set-bubbles-row" id="bubbles-${ex.id}">`;
     for (let i = 1; i <= ex.sets; i++) {
-      bubblesHtml += `<div class="set-bubble${ex.isHold?' hold-bubble':''}" id="bubble-${ex.id}-${i}" onclick="markSet('${ex.id}',${i},${ex.rest||0},'${(ex.name).replace(/'/g,"\\'")}',${ex.isHold?'true':'false'})" title="Set ${i}">${i}</div>`;
+      bubblesHtml += `<div class="set-bubble${ex.isHold?' hold-bubble':''}" id="bubble-${ex.id}-${i}" onclick="event.stopPropagation();markSet('${ex.id}',${i},${ex.rest||0},'${(ex.name).replace(/'/g,"\\'")}',${ex.isHold?'true':'false'})" title="Set ${i}">${i}</div>`;
     }
-    // Weight chip
-    bubblesHtml += `<div class="weight-chip"><div class="weight-val" id="wv-${ex.id}" onclick="openWeightModal('${ex.id}','${(ex.name).replace(/'/g,"\\'")}')">+ Weight</div><span class="pr-badge" id="pr-${ex.id}">PR!</span></div>`;
+    bubblesHtml += `<div class="weight-chip"><div class="weight-val" id="wv-${ex.id}" onclick="event.stopPropagation();openWeightModal('${ex.id}','${(ex.name).replace(/'/g,"\\'")}')">+ Weight</div><span class="pr-badge" id="pr-${ex.id}">PR!</span></div>`;
     bubblesHtml += `</div>`;
   }
 
-  // Actions
+  // Action row (rest/hold timers only — video is now in the detail sheet)
   let actHtml = '';
-  if (ex.video) actHtml += `<button class="ex-btn vid" onclick="openVideo('${ex.video}','${(ex.name).replace(/'/g,"\\'")}')">▶ Video</button>`;
-  if (ex.rest) actHtml += `<button class="ex-btn tmr" onclick="openRest(${ex.rest},'${(ex.name).replace(/'/g,"\\'")}')">⏱ ${ex.rest}s</button>`;
-  if (ex.isHold && ex.holdSecs) actHtml += `<button class="ex-btn hld" onclick="openHold(${ex.holdSecs},'${(ex.name).replace(/'/g,"\\'")}')">⏱ Hold</button>`;
+  if (ex.rest) actHtml += `<button class="ex-btn tmr" onclick="event.stopPropagation();openRest(${ex.rest},'${(ex.name).replace(/'/g,"\\'")}')">⏱ ${ex.rest}s</button>`;
+  if (ex.isHold && ex.holdSecs) actHtml += `<button class="ex-btn hld" onclick="event.stopPropagation();openHold(${ex.holdSecs},'${(ex.name).replace(/'/g,"\\'")}')">⏱ Hold</button>`;
 
-  return `<div class="ex-card" id="ec-${ex.id}">
+  return `<div class="ex-card" id="ec-${ex.id}" onclick="openExSheet('${ex.id}')" style="cursor:pointer;">
   <div class="ex-inner">
-    <div class="ex-check-col"><input type="checkbox" class="ex-checkbox" id="cb-${ex.id}" data-day="${dayId}" onchange="checkboxChanged('${ex.id}','${dayId}')"></div>
+    <div class="ex-check-col"><input type="checkbox" class="ex-checkbox" id="cb-${ex.id}" data-day="${dayId}" onchange="checkboxChanged('${ex.id}','${dayId}')" onclick="event.stopPropagation()"></div>
     <div class="ex-main">
       <div class="ex-name">${ex.name}</div>
       ${ex.note ? `<div class="ex-note">${ex.note}</div>` : ''}
       <div class="ex-tags">${tagsHtml}</div>
       ${bubblesHtml}
-      ${ex.tip ? `<button class="coach-tip-toggle" onclick="toggleTip('${ex.id}')">▸ Coach Tip</button><div class="coach-tip-body" id="tip-${ex.id}">${ex.tip}</div>` : ''}
+      ${ex.tip ? `<button class="coach-tip-toggle" onclick="event.stopPropagation();toggleTip('${ex.id}')">▸ Coach Tip</button><div class="coach-tip-body" id="tip-${ex.id}">${ex.tip}</div>` : ''}
     </div>
     ${actHtml ? `<div class="ex-actions">${actHtml}</div>` : ''}
   </div>
 </div>`;
 }
-
 function buildWedPhases() {
   let html = `<div class="block"><div class="block-header">PF360 Skill Block — 30 min (Select Your Phase)</div>
   <div class="phase-tabs">`;
@@ -1901,64 +1924,98 @@ const VIDEO_MAP = {
   'stair climber':'Zn1O9LcKW9E',
 }
 
-function openVideo(query, name) {
-  document.getElementById('vmLabel').textContent = name;
-  const q = (name + ' ' + query).toLowerCase();
+
+function openExSheet(exId) {
+  const ex = findExercise(exId);
+  if (!ex) return;
+
+  // Name
+  document.getElementById('exdName').textContent = ex.name;
+
+  // Note
+  const noteEl = document.getElementById('exdNote');
+  if (ex.note) { noteEl.textContent = ex.note; noteEl.style.display = 'block'; }
+  else { noteEl.style.display = 'none'; }
+
+  // Tags
+  let tagsHtml = '';
+  if (ex.sets > 0) tagsHtml += `<span class="ex-tag t-sets">${ex.sets} Sets</span>`;
+  if (ex.reps && !ex.isHold) tagsHtml += `<span class="ex-tag t-reps">${ex.reps} Reps</span>`;
+  if (ex.isHold && ex.holdSecs) tagsHtml += `<span class="ex-tag t-hold">${ex.holdSecs}s Hold</span>`;
+  if (ex.rest) tagsHtml += `<span class="ex-tag t-rest">Rest ${ex.rest}s</span>`;
+  document.getElementById('exdTags').innerHTML = tagsHtml;
+
+  // Video lookup
+  const q = (ex.name + ' ' + (ex.video || '')).toLowerCase();
   let videoId = null;
   for (const [k, v] of Object.entries(VIDEO_MAP)) {
     if (q.includes(k)) { videoId = v; break; }
   }
-  const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(query);
-  document.getElementById('vmSearch').href = searchUrl;
+  const searchUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ex.video || ex.name);
+  document.getElementById('exdSearch').href = searchUrl;
 
-  // Reset to thumbnail state (don't load iframe until user taps play)
-  const frame = document.getElementById('vmFrame');
-  const thumb = document.getElementById('vmThumb');
-  const thumbWrap = document.getElementById('vmThumbWrap');
-  const playBtn = document.getElementById('vmPlayBtn');
+  const frame = document.getElementById('exdFrame');
+  const thumbWrap = document.getElementById('exdThumbWrap');
+  const videoWrap = document.getElementById('exdVideoWrap');
+  const noVideo = document.getElementById('exdNoVideo');
   frame.src = '';
   frame.style.display = 'none';
   thumbWrap.style.display = 'block';
 
   if (videoId) {
-    // Use hqdefault — higher res than mqdefault, works for all videos
-    thumb.src = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
-    thumb.style.display = 'block';
-    playBtn.style.display = 'flex';
+    videoWrap.style.display = 'block';
+    noVideo.style.display = 'none';
+    document.getElementById('exdThumb').src = 'https://img.youtube.com/vi/' + videoId + '/hqdefault.jpg';
+    document.getElementById('exdPlayBtn').style.display = 'flex';
     thumbWrap.dataset.videoId = videoId;
-    document.getElementById('vmYT').href = 'https://www.youtube.com/watch?v=' + videoId;
-    document.getElementById('vmYT').querySelector('button').textContent = '▶ Open in YouTube';
+    document.getElementById('exdYT').href = 'https://www.youtube.com/watch?v=' + videoId;
   } else {
-    // No match — show search prompt instead of broken thumbnail
-    thumb.src = '';
-    thumb.style.display = 'none';
-    playBtn.style.display = 'none';
+    videoWrap.style.display = 'none';
+    noVideo.style.display = 'block';
     thumbWrap.dataset.videoId = '';
-    document.getElementById('vmYT').href = searchUrl;
-    document.getElementById('vmYT').querySelector('button').textContent = 'Find on YouTube';
+    document.getElementById('exdYT').href = searchUrl;
   }
-  openOverlay('videoModal');
+
+  // Coach tip
+  const tipBlock = document.getElementById('exdTipBlock');
+  if (ex.tip) {
+    document.getElementById('exdTipText').textContent = ex.tip;
+    tipBlock.style.display = 'block';
+  } else {
+    tipBlock.style.display = 'none';
+  }
+
+  // Timers
+  const timerRow = document.getElementById('exdTimerRow');
+  const restBtn = document.getElementById('exdRestBtn');
+  const holdBtn = document.getElementById('exdHoldBtn');
+  restBtn.style.display = 'none';
+  holdBtn.style.display = 'none';
+  if (ex.rest) {
+    restBtn.style.display = '';
+    restBtn.textContent = `⏱ Rest ${ex.rest}s`;
+    restBtn.onclick = () => { closeModal('exDetailModal'); openRest(ex.rest, ex.name); };
+  }
+  if (ex.isHold && ex.holdSecs) {
+    holdBtn.style.display = '';
+    holdBtn.textContent = `⏱ Hold ${ex.holdSecs}s`;
+    holdBtn.onclick = () => { closeModal('exDetailModal'); openHold(ex.holdSecs, ex.name); };
+  }
+  timerRow.style.display = (ex.rest || (ex.isHold && ex.holdSecs)) ? 'flex' : 'none';
+
+  openOverlay('exDetailModal');
 }
 
-function vmLoadIframe() {
-  const videoId = document.getElementById('vmThumbWrap').dataset.videoId;
+function exdLoadIframe() {
+  const videoId = document.getElementById('exdThumbWrap').dataset.videoId;
   if (!videoId) return;
-  const frame = document.getElementById('vmFrame');
-  const thumbWrap = document.getElementById('vmThumbWrap');
-  // Autoplay=1 since user explicitly tapped play
-  frame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&autoplay=1';
+  const frame = document.getElementById('exdFrame');
+  frame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?rel=0&autoplay=1&playsinline=1';
   frame.style.display = 'block';
-  thumbWrap.style.display = 'none';
+  document.getElementById('exdThumbWrap').style.display = 'none';
 }
 
-function closeVideo() {
-  document.getElementById('vmFrame').src = '';
-  document.getElementById('vmFrame').style.display = 'none';
-  document.getElementById('vmThumbWrap').style.display = 'block';
-  closeModal('videoModal');
-}
 
-function videoOverlayClick(e) { if (e.target.id === 'videoModal') closeVideo(); }
 
 // ═══════════════════════════════════════════════════════
 //  MODAL HELPERS
@@ -1969,10 +2026,16 @@ function closeModal(id) {
   if (id === 'restOverlay') { clearInterval(restInterval); restRunning = false; }
   if (id === 'holdOverlay') { clearInterval(holdInterval); holdRunning = false; }
   if (id === 'intervalModal') stopInterval();
+  if (id === 'exDetailModal') {
+    const f = document.getElementById('exdFrame');
+    f.src = '';
+    f.style.display = 'none';
+    document.getElementById('exdThumbWrap').style.display = 'block';
+  }
 }
 
 document.querySelectorAll('.overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === o && o.id !== 'videoModal') closeModal(o.id); });
+  o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); });
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(o => closeModal(o.id)); });
 
